@@ -73,13 +73,23 @@ h3 {
     position: relative;
     letter-spacing: 2px;
     text-shadow: 0 0 30px rgba(0, 0, 0, 0.8);
-    opacity: 0;
-    /* Animated in */
-    transform: translateY(20px);
+    /* Default to visible for SEO/No-JS fallback */
+    opacity: 1;
+    transform: translateY(0);
     transition: all 0.8s ease-out;
 }
 
-.section-title.visible {
+/* JS will add this class to hide initially */
+.section-title.hidden,
+.roster-card.hidden,
+.gallery-item.hidden {
+    opacity: 0;
+    transform: translateY(20px);
+}
+
+.section-title.visible,
+.roster-card.visible,
+.gallery-item.visible {
     opacity: 1;
     transform: translateY(0);
 }

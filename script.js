@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    
+
     // --- 1. Sticky Navigation ---
     const nav = document.querySelector('.main-nav');
     window.addEventListener('scroll', () => {
@@ -9,6 +9,9 @@ document.addEventListener('DOMContentLoaded', () => {
             nav.classList.remove('scrolled');
         }
     });
+
+    // --- 3. Scroll Reveal Animation ---
+    const revealElements = document.querySelectorAll('.section-title, .roster-card, .gallery-item');
 
     // --- 2. Smooth Scrolling for Anchors ---
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
@@ -24,21 +27,18 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // --- 3. Scroll Reveal Animation ---
-    const revealElements = document.querySelectorAll('.section-title, .roster-card, .gallery-item');
-    
-    // Initial setup: hide them (handled in CSS for section-title, let's add for others via JS to be safe)
+    // Initial setup: Add 'hidden' class to trigger animation start state from CSS
+    // This ensures that if JS fails, the CSS default (visible) takes over.
     revealElements.forEach(el => {
-        el.style.opacity = '0';
-        el.style.transform = 'translateY(20px)';
-        el.style.transition = 'opacity 0.6s ease-out, transform 0.6s ease-out';
+        el.classList.add('hidden');
     });
+
 
     const revealObserver = new IntersectionObserver((entries, observer) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
-                entry.target.style.opacity = '1';
-                entry.target.style.transform = 'translateY(0)';
+                entry.target.classList.remove('hidden');
+                entry.target.classList.add('visible');
                 // Optional: Stop observing once revealed
                 observer.unobserve(entry.target);
             }
@@ -68,11 +68,11 @@ document.addEventListener('DOMContentLoaded', () => {
             const rect = card.getBoundingClientRect();
             const x = e.clientX - rect.left;
             const y = e.clientY - rect.top;
-            
+
             // Calculate center
             const centerX = rect.width / 2;
             const centerY = rect.height / 2;
-            
+
             const rotateX = ((y - centerY) / centerY) * -5; // Max 5deg rotation
             const rotateY = ((x - centerX) / centerX) * 5;
 
