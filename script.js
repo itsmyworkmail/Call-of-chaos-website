@@ -83,4 +83,68 @@ document.addEventListener('DOMContentLoaded', () => {
             card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) scale(1)';
         });
     });
+
+    // --- 6. Robust Video Autoplay & Fallback ---
+    const videos = document.querySelectorAll('video');
+
+    // Create Play Button Overlay Helper
+    function addPlayOverlay(videoContainer) {
+        if (videoContainer.querySelector('.play-btn-overlay')) return;
+
+        const overlay = document.createElement('div');
+        overlay.className = 'play-btn-overlay';
+        overlay.innerHTML = `
+            <div class="play-icon">
+                <svg viewBox="0 0 24 24" fill="currentColor" width="48" height="48">
+                    <path d="M8 5v14l11-7z"/>
+                </svg>
+            </div>
+        `;
+
+        videoContainer.appendChild(overlay);
+
+        // On click, play and remove overlay
+        overlay.addEventListener('click', (e) => {
+            e.stopPropagation(); // prevent other clicks
+            const video = videoContainer.querySelector('video');
+            if (video) {
+                video.muted = false; // Unmute on manual interaction if desired, or keep muted
+                video.play().then(() => {
+                    overlay.classList.add('playing');
+                    setTimeout(() => overlay.remove(), 300);
+                }).catch(err => console.error("Video play failed:", err));
+            }
+        });
+    }
+
+    videos.forEach(video => {
+        // Ensure critical attributes for mobile
+        video.setAttribute('playsinline', '');
+        video.muted = true;
+
+        // Try to play
+        const playPromise = video.play();
+        if (playPromise !== undefined) {
+            playPromise.catch(error => {
+                // Auto-play was prevented
+                console.log('Autoplay prevented, adding fallback UI:', error);
+                const container = video.closest('.media-item');
+                if (container) addPlayOverlay(container);
+            });
+        }
+
+        // Also check if it pauses (e.g. low power mode might pause it)
+        video.addEventListener('pause', () => {
+            const container = video.closest('.media-item');
+            if (container && !video.seeking) { // Don't show while seeking
+                addPlayOverlay(container);
+            }
+        });
+
+        video.addEventListener('playing', () => {
+            const container = video.closest('.media-item');
+            const overlay = container?.querySelector('.play-btn-overlay');
+            if (overlay) overlay.remove();
+        });
+    });
 });
