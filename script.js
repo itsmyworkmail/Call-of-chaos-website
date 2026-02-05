@@ -147,4 +147,97 @@ document.addEventListener('DOMContentLoaded', () => {
             if (overlay) overlay.remove();
         });
     });
+
+    // --- 7. Loader ---
+    const loader = document.getElementById('loader');
+    const hideLoader = () => {
+        if (loader && !loader.classList.contains('fade-out')) {
+            setTimeout(() => {
+                loader.classList.add('fade-out');
+            }, 800); // Minimum time to show loader
+        }
+    };
+
+    if (document.readyState === 'complete') {
+        hideLoader();
+    } else {
+        window.addEventListener('load', hideLoader);
+    }
+
+    // --- 8. Lightbox Logic ---
+    const lightbox = document.getElementById('lightbox');
+    const lightboxContent = lightbox.querySelector('.lightbox-content');
+    const closeLightbox = lightbox.querySelector('.close-lightbox');
+    const mediaItems = document.querySelectorAll('.media-item');
+
+    mediaItems.forEach(item => {
+        item.addEventListener('click', () => {
+            // Find content (img or video)
+            const img = item.querySelector('img');
+            const video = item.querySelector('video');
+            let contentToClone = null;
+
+            if (video) {
+                contentToClone = video.cloneNode(true);
+                contentToClone.controls = true;
+                contentToClone.muted = false;
+                // Auto-play might be blocked by browser policy without user interaction,
+                // but since the user clicked to open lightbox, it might work.
+                contentToClone.autoplay = true;
+            } else if (img) {
+                contentToClone = img.cloneNode(true);
+            }
+
+            if (contentToClone) {
+                lightboxContent.innerHTML = '';
+                lightboxContent.appendChild(contentToClone);
+                lightbox.classList.add('active');
+            }
+        });
+    });
+
+    // Close Lightbox
+    if (closeLightbox) {
+        closeLightbox.addEventListener('click', () => {
+            lightbox.classList.remove('active');
+            lightboxContent.innerHTML = ''; // Stop video playback
+        });
+    }
+
+    // Close on background click
+    lightbox.addEventListener('click', (e) => {
+        if (e.target === lightbox) {
+            lightbox.classList.remove('active');
+            lightboxContent.innerHTML = '';
+        }
+    });
+
+    // Close on Escape key
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && lightbox.classList.contains('active')) {
+            lightbox.classList.remove('active');
+            lightboxContent.innerHTML = '';
+        }
+    });
+
+    // --- 9. Back to Top ---
+    const backToTopBtn = document.getElementById('back-to-top');
+
+    window.addEventListener('scroll', () => {
+        if (window.scrollY > 300) {
+            backToTopBtn.classList.add('visible');
+        } else {
+            backToTopBtn.classList.remove('visible');
+        }
+    });
+
+    if (backToTopBtn) {
+        backToTopBtn.addEventListener('click', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+    }
+
 });

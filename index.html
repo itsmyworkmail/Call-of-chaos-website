@@ -6,19 +6,33 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Call of Chaos | Elite COD: Mobile Unit</title>
     <meta name="description" content="Official community page for Call of Chaos - RAGE Squad.">
+
+    <!-- Open Graph / Social Media Meta Tags -->
+    <meta property="og:title" content="Call of Chaos | Elite COD: Mobile Unit">
+    <meta property="og:description" content="Official community page for Call of Chaos - RAGE Squad. Dominating the battlefield.">
+    <meta property="og:image" content="assets/call_of_chaos_logo.png">
+    <meta property="og:url" content="https://callofchaos.com">
+    <meta property="og:type" content="website">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="assets/call_of_chaos_logo.png">
+
     <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-    <!-- Loading Screen (Optional, good for premium feel) -->
-    <div id="loader" style="display:none;"></div>
+    <!-- Loading Screen -->
+    <div id="loader">
+        <div class="spinner"></div>
+        <div class="loader-text">INITIALIZING...</div>
+    </div>
 
     <!-- Navigation -->
     <nav class="main-nav">
         <div class="container nav-container">
             <a href="#" class="logo">
-                <img src="assets/logo_main.jpg" alt="Logo" class="nav-logo-img">
+                <img src="assets/call_of_chaos_logo.png" alt="Logo" class="nav-logo-img">
                 <span>CALL OF <span class="highlight">CHAOS</span></span>
             </a>
             <ul class="nav-links">
@@ -179,6 +193,19 @@
             </div>
         </div>
     </footer>
+
+    <!-- Lightbox Modal -->
+    <div id="lightbox" class="lightbox">
+        <span class="close-lightbox">&times;</span>
+        <div class="lightbox-content">
+            <!-- Content injected via JS -->
+        </div>
+    </div>
+
+    <!-- Back to Top Button -->
+    <button id="back-to-top" aria-label="Back to Top">
+        &#8679;
+    </button>
 
     <script src="script.js"></script>
 </body>
