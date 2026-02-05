@@ -149,14 +149,20 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // --- 7. Loader ---
-    window.addEventListener('load', () => {
-        const loader = document.getElementById('loader');
-        if (loader) {
+    const loader = document.getElementById('loader');
+    const hideLoader = () => {
+        if (loader && !loader.classList.contains('fade-out')) {
             setTimeout(() => {
                 loader.classList.add('fade-out');
             }, 800); // Minimum time to show loader
         }
-    });
+    };
+
+    if (document.readyState === 'complete') {
+        hideLoader();
+    } else {
+        window.addEventListener('load', hideLoader);
+    }
 
     // --- 8. Lightbox Logic ---
     const lightbox = document.getElementById('lightbox');
